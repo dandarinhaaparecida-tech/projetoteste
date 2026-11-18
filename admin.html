@@ -1,0 +1,132 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Painel Administrativo - Minha Loja</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: #f1f3f5;
+}
+
+header {
+    background: #222;
+    color: white;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+main {
+    max-width: 1000px;
+    margin: 30px auto;
+    padding: 20px;
+}
+
+.painel {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+button {
+    padding: 12px 18px;
+    border: none;
+    border-radius: 6px;
+    background: #198754;
+    color: white;
+    cursor: pointer;
+    margin: 4px;
+}
+
+.excluir {
+    background: #dc3545;
+}
+
+.sair {
+    background: #dc3545;
+}
+
+.produto {
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+#mensagem {
+    font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h2>MINHA LOJA - ADMINISTRAÇÃO</h2>
+
+    <button class="sair" id="btnSair">
+        Sair do sistema
+    </button>
+</header>
+
+<main>
+
+<section class="painel">
+
+    <h2>Cadastrar produtos</h2>
+
+    <form id="formProduto">
+
+        <label>Nome do produto</label>
+        <input type="text" id="nome" required>
+
+        <label>Descrição</label>
+        <input type="text" id="descricao">
+
+        <label>Preço</label>
+        <input type="number" id="preco" min="0" step="0.01" required>
+
+        <label>Quantidade em estoque</label>
+        <input type="number" id="estoque" min="0" step="1" required>
+
+        <button type="submit">Salvar produto</button>
+
+    </form>
+
+    <p id="mensagem"></p>
+
+</section>
+
+<section class="painel">
+
+    <h2>Produtos cadastrados</h2>
+
+    <div id="listaProdutos">
+        Carregando produtos...
+    </div>
+
+</section>
+
+</main>
+
+<script type="module" src="./js/admin.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,322 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Login Administrativo - Minha Loja</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background: linear-gradient(135deg, #e9ecef, #ced4da);
+    font-family: Arial, sans-serif;
+}
+
+.login-container {
+    background: white;
+    width: 100%;
+    max-width: 410px;
+    padding: 35px;
+    border-radius: 16px;
+    box-shadow: 0 8px 30px rgba(0,0,0,.12);
+}
+
+h1 {
+    text-align: center;
+    color: #222;
+    margin-bottom: 8px;
+}
+
+.descricao {
+    text-align: center;
+    color: #777;
+    margin-bottom: 28px;
+}
+
+label {
+    display: block;
+    margin-top: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+input {
+    width: 100%;
+    padding: 14px;
+    margin-top: 8px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+button {
+    width: 100%;
+    padding: 14px;
+    margin-top: 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: .2s;
+}
+
+button:hover {
+    opacity: .85;
+}
+
+.entrar {
+    background: #222;
+    color: white;
+}
+
+.google-btn {
+    background: white;
+    color: #333;
+    border: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.google-btn img {
+    width: 20px;
+}
+
+.voltar {
+    background: #198754;
+    color: white;
+}
+
+#mensagem {
+    text-align: center;
+    font-size: 14px;
+    margin-top: 15px;
+    line-height: 1.5;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="login-container">
+
+    <h1>MINHA LOJA.</h1>
+
+    <p class="descricao">
+        Acesso exclusivo administrativo
+    </p>
+
+    <form id="formLogin">
+
+        <label for="email">E-mail</label>
+
+        <input
+            type="email"
+            id="email"
+            placeholder="seunome@hotmail.com"
+            autocomplete="username"
+            required
+        >
+
+        <label for="senha">Senha</label>
+
+        <input
+            type="password"
+            id="senha"
+            placeholder="Digite sua senha"
+            autocomplete="current-password"
+            required
+        >
+
+        <button type="submit" class="entrar">
+            Entrar no sistema
+        </button>
+
+        <p id="mensagem" aria-live="polite"></p>
+
+    </form>
+
+    <button type="button" id="btnGoogle" class="google-btn">
+        <img
+            src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
+            alt="Google">
+        Entrar com Google
+    </button>
+
+    <button
+        type="button"
+        class="voltar"
+        id="btnVoltar">
+        ← Voltar para a loja
+    </button>
+
+</div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/13.3.0/firebase-app.js";
+
+import {
+    getAuth,
+    signInWithEmailAndPassword,
+    GoogleAuthProvider,
+    signInWithPopup,
+    signOut
+} from "https://www.gstatic.com/firebasejs/13.3.0/firebase-auth.js";
+
+import {
+    getFirestore,
+    doc,
+    getDoc
+} from "https://www.gstatic.com/firebasejs/13.3.0/firebase-firestore.js";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyDHd_BwA3nC0mNQA3vI5T6jWKCQj-g8K3U",
+    authDomain: "lojavirtual-43aa2.firebaseapp.com",
+    projectId: "lojavirtual-43aa2",
+    storageBucket: "lojavirtual-43aa2.firebasestorage.app",
+    messagingSenderId: "745894792727",
+    appId: "1:745894792727:web:f9a1fc5c3efb4546c99652"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const formulario = document.getElementById("formLogin");
+const mensagem = document.getElementById("mensagem");
+const googleProvider = new GoogleAuthProvider();
+
+googleProvider.setCustomParameters({
+    prompt: "select_account"
+});
+
+let processando = false;
+
+async function verificarAdmin(usuario) {
+
+    const referencia = doc(db, "usuarios", usuario.uid);
+    const documento = await getDoc(referencia);
+
+    if (!documento.exists() ||
+        documento.data().perfil !== "admin") {
+
+        await signOut(auth);
+
+        throw new Error("nao-admin");
+    }
+
+    window.location.replace("./admin.html");
+}
+
+function mostrarErro(erro, tipo) {
+
+    console.error(erro);
+
+    mensagem.style.color = "#dc3545";
+
+    if (erro.message === "nao-admin") {
+        mensagem.textContent =
+            "Sua conta não tem permissão de administrador.";
+    } else if (erro.code === "auth/unauthorized-domain") {
+        mensagem.textContent =
+            "Domínio não autorizado no Firebase.";
+    } else if (erro.code === "auth/popup-blocked") {
+        mensagem.textContent =
+            "O navegador bloqueou a janela do Google.";
+    } else if (erro.code === "auth/popup-closed-by-user") {
+        mensagem.textContent =
+            "A janela de login foi fechada.";
+    } else {
+        mensagem.textContent =
+            tipo === "google"
+            ? "Não foi possível entrar com Google. Confira as configurações do Firebase."
+            : "E-mail ou senha incorretos. Verifique seus dados.";
+    }
+}
+
+formulario.addEventListener("submit", async (event) => {
+
+    event.preventDefault();
+
+    if (processando) return;
+    processando = true;
+
+    const email = document.getElementById("email").value.trim();
+    const senha = document.getElementById("senha").value;
+
+    mensagem.style.color = "#333";
+    mensagem.textContent = "Verificando acesso...";
+
+    try {
+
+        const credencial = await signInWithEmailAndPassword(
+            auth,
+            email,
+            senha
+        );
+
+        await verificarAdmin(credencial.user);
+
+    } catch (erro) {
+
+        mostrarErro(erro, "email");
+
+    } finally {
+        processando = false;
+    }
+
+});
+
+document.getElementById("btnGoogle")
+.addEventListener("click", async () => {
+
+    if (processando) return;
+    processando = true;
+
+    mensagem.style.color = "#333";
+    mensagem.textContent = "Conectando com Google...";
+
+    try {
+
+        const resultado = await signInWithPopup(
+            auth,
+            googleProvider
+        );
+
+        await verificarAdmin(resultado.user);
+
+    } catch (erro) {
+
+        mostrarErro(erro, "google");
+
+    } finally {
+        processando = false;
+    }
+
+});
+
+document.getElementById("btnVoltar")
+.addEventListener("click", () => {
+    window.location.assign("./index.html");
+});
+
+</script>
+
+</body>
+</html>

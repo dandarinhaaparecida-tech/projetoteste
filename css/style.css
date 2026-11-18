@@ -1,0 +1,391 @@
+
+:root {
+    --bg: #f5f5f5;
+    --card: #ffffff;
+    --text: #222222;
+    --muted: #777777;
+    --accent: #7357e8;
+  }
+  
+  body.dark {
+    --bg: #111318;
+    --card: #1c2029;
+    --text: #f5f5f5;
+    --muted: #a4a8b3;
+    --accent: #a18cff;
+  }
+  
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    transition: .3s;
+  }
+  
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 7%;
+    background: var(--card);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow: 0 2px 12px #00000012;
+  }
+  
+  .logo {
+    font-size: 23px;
+    font-weight: bold;
+  }
+  
+  .actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  button {
+    cursor: pointer;
+    border: none;
+    border-radius: 9px;
+    padding: 12px 18px;
+    font-weight: bold;
+  }
+  
+  #theme {
+    background: var(--bg);
+    color: var(--text);
+  }
+  
+  #cart {
+    background: var(--accent);
+    color: white;
+  }
+  
+  .hero {
+    text-align: center;
+    padding: 65px 20px 35px;
+  }
+  
+  .hero h1 {
+    font-size: clamp(30px, 5vw, 45px);
+    margin-bottom: 12px;
+  }
+  
+  .hero p {
+    color: var(--muted);
+  }
+  
+  .products {
+    max-width: 1100px;
+    margin: 20px auto 70px;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+  }
+  
+  .product {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 18px;
+    box-shadow: 0 5px 20px #0000000b;
+    transition: transform .2s;
+  }
+  
+  .product:hover {
+    transform: translateY(-5px);
+  }
+  
+  .product img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    border-radius: 12px;
+    background: var(--bg);
+  }
+  
+  .product h2 {
+    margin: 16px 0 8px;
+    font-size: 19px;
+  }
+  
+  .description {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.5;
+    min-height: 42px;
+  }
+  
+  .price {
+    font-size: 22px;
+    font-weight: bold;
+    margin: 16px 0;
+  }
+  
+  .buy {
+    width: 100%;
+    background: var(--accent);
+    color: white;
+    font-size: 15px;
+  }
+  
+  .buy:hover {
+    filter: brightness(1.12);
+  }
+  
+  #cartDetails {
+    display: none;
+    position: fixed;
+    right: 20px;
+    top: 85px;
+    width: min(350px, calc(100vw - 40px));
+    background: var(--card);
+    color: var(--text);
+    padding: 22px;
+    border-radius: 14px;
+    box-shadow: 0 8px 35px #0005;
+    z-index: 20;
+  }
+  
+  #cartDetails h3 {
+    margin-bottom: 15px;
+  }
+  
+  .cart-item {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--muted);
+    font-size: 14px;
+  }
+  
+  .total {
+    font-size: 21px;
+    font-weight: bold;
+    margin-top: 18px;
+  }
+  
+  .empty {
+    color: var(--muted);
+  }
+  
+  @media(max-width: 700px) {
+    .products {
+      grid-template-columns: 1fr;
+      max-width: 430px;
+    }
+  
+    header {
+      padding: 16px;
+    }
+  
+    .logo {
+      font-size: 18px;
+    }
+  
+    .actions {
+      gap: 8px;
+    }
+  
+    button {
+      padding: 10px;
+      font-size: 12px;
+    }
+  }
+  
+/* ============================
+   CHAT AUTOMÁTICO
+============================ */
+
+#btn-abrir-chat {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 999;
+  background: #16a34a;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  padding: 15px 20px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+#chat-container {
+  display: none;
+  flex-direction: column;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 340px;
+  max-width: calc(100vw - 30px);
+  height: 480px;
+  max-height: calc(100vh - 40px);
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 5px 25px rgba(0,0,0,0.25);
+  z-index: 1000;
+  overflow: hidden;
+  color: #222;
+}
+
+#chat-container.chat-aberto {
+  display: flex;
+}
+
+.chat-header {
+  background: #16a34a;
+  color: white;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+}
+
+.chat-header button {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+#chat-messages {
+  flex: 1;
+  padding: 15px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bot-message,
+.user-message {
+  padding: 12px;
+  border-radius: 12px;
+  white-space: pre-line;
+  max-width: 90%;
+  font-size: 14px;
+}
+
+.bot-message {
+  background: #f0f0f0;
+  align-self: flex-start;
+}
+
+.user-message {
+  background: #dcfce7;
+  align-self: flex-end;
+}
+
+.quick-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 10px;
+  border-top: 1px solid #eee;
+}
+
+.quick-buttons button {
+  flex: 1;
+  padding: 9px 5px;
+  border: none;
+  border-radius: 8px;
+  background: #e8f5e9;
+  color: #166534;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.chat-input {
+  display: flex;
+  padding: 10px;
+  gap: 7px;
+  border-top: 1px solid #eee;
+}
+
+.chat-input input {
+  flex: 1;
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.chat-input button {
+  background: #16a34a;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+@media (max-width: 480px) {
+  #chat-container {
+    right: 10px;
+    bottom: 10px;
+    width: calc(100vw - 20px);
+  }
+
+  #btn-abrir-chat {
+    right: 12px;
+    bottom: 12px;
+  }
+}
+
+/* =====================================
+   DARK MODE
+===================================== */
+
+body {
+  background-color: #f5f5f5;
+  color: #222;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+body.dark-mode {
+  background-color: #171717;
+  color: #ffffff;
+}
+
+body.dark-mode header,
+body.dark-mode .product-card,
+body.dark-mode #cartDetails,
+body.dark-mode .hero {
+  background-color: #252525;
+  color: #ffffff;
+}
+
+body.dark-mode button {
+  background-color: #444;
+  color: #ffffff;
+  border-color: #666;
+}
+
+body.dark-mode input {
+  background-color: #333;
+  color: #fff;
+  border: 1px solid #666;
+}
+
+body.dark-mode .bot-message {
+  background-color: #333;
+  color: #fff;
+}
+
+body.dark-mode .user-message {
+  background-color: #075e54;
+  color: #fff;
+}

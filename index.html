@@ -1,0 +1,159 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Minha Vitrine</title>
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <header>
+    <div class="logo">MINHA LOJA.</div>
+
+    <div class="actions">
+      <button onclick="window.location.href='cadprodutos.html'"Acesso Administrativo">Acesso Administrativo</button>
+      <div class="actions">
+        <button id="theme" onclick="toggleTheme()">
+          🌙 Dark Mode
+        </button>
+
+      <button id="cart" onclick="toggleCart()">
+        🛒 Carrinho (<span id="count">0</span>)
+        <br>
+        R$ <span id="headerTotal">0,00</span>
+      </button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <h1>Encontre seu próximo favorito.</h1>
+    <p>Produtos selecionados especialmente para você.</p>
+  </section>
+
+  <main class="products" id="products"></main>
+
+  <!-- CARRINHO -->
+<!-- CARRINHO -->
+<div id="cartDetails">
+  <h3>Seu carrinho 🛒</h3>
+
+  <div id="cartItems"></div>
+
+  <!-- Resumo detalhado para o script funcionar perfeitamente -->
+  <div style="margin: 15px 0; font-size: 14px;">
+    <p>Subtotal: R$ <span id="subtotalCompra">0,00</span></p>
+    <p>Frete: <span id="freteResumo">Calcule o frete</span></p>
+    <p><strong>Total Final: R$ <span id="totalFinal">0,00</span></strong></p>
+  </div>
+
+  <div class="total">
+    Total dos produtos: R$ <span id="total">0,00</span>
+  </div>
+
+  <div id="dadosEntrega" style="margin:15px 0;">
+    <label for="enderecoEntrega"><strong>CEP e número do imóvel para calcular o frete:</strong></label>
+    <input
+      type="text"
+      id="enderecoEntrega"
+      placeholder="Ex.: 12600-000, 123"
+      autocomplete="postal-code"
+      style="display:block;width:100%;padding:12px;margin:8px 0;box-sizing:border-box;"
+    >
+    <button type="button" id="btnCalcularFrete" onclick="calcularFrete()">Calcular frete</button>
+    <p id="mensagemFrete" aria-live="polite">O robô solicitará seu CEP ao finalizar a venda.</p>
+    <p id="freteDistancia">Distância: --</p>
+    <p>Frete calculado: <strong id="freteValor">R$ 0,00</strong></p>
+  </div>
+
+  <button class="buy checkout" id="btnFinalizarCompra" onclick="finalizarCompra()" disabled>
+    🛍️ Finalizar venda
+  </button>
+</div>
+
+  <!-- BOTÃO PARA ABRIR O CHAT -->
+  <button id="btn-abrir-chat" onclick="alternarChat()">
+    💬 Tem dúvidas? Chame nosso vendedor!
+  </button>
+
+  <!-- CHAT AUTOMÁTICO -->
+  <div id="chat-container">
+
+    <div class="chat-header">
+      <span>🤖 Robô Assistente</span>
+      <button onclick="alternarChat()">✖</button>
+    </div>
+
+    <!-- MENSAGENS -->
+    <div id="chat-messages">
+
+      <div class="bot-message">
+        Olá! Seja bem-vindo à Minha Loja! 😊
+
+        Sou seu assistente virtual. Você pode escrever uma pergunta
+        ou enviar uma foto de um produto para encontrar semelhantes
+        na nossa loja.
+
+        📸 Envie uma fotografia para começar!
+      </div>
+
+    </div>
+
+    <!-- PERGUNTAS FREQUENTES -->
+    <div class="quick-buttons">
+      <button onclick="responderFAQ('desconto')">
+        💰 Descontos
+      </button>
+
+      <button onclick="responderFAQ('frete')">
+        🚚 Frete
+      </button>
+
+      <button onclick="responderFAQ('comprar')">
+        🛍️ Como comprar
+      </button>
+    </div>
+
+    <!-- CAMPO DE MENSAGEM E FOTO -->
+    <div class="chat-input">
+
+      <input
+        type="text"
+        id="mensagemUsuario"
+        placeholder="Digite sua pergunta..."
+      >
+
+      <label for="fotoNoChat" class="botao-foto" title="Enviar foto">
+        📷
+      </label>
+
+      <input
+        type="file"
+        id="fotoNoChat"
+        accept="image/*"
+        capture="environment"
+        hidden
+      >
+
+      <button onclick="enviarMensagem()">
+        Enviar
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- BIBLIOTECAS PARA RECONHECIMENTO DE IMAGENS -->
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.17.0/dist/tf.min.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.1"></script>
+
+  <!-- SCRIPT PRINCIPAL DA LOJA -->
+  <script src="js/script.js"></script>
+
+</body>
+</html>
